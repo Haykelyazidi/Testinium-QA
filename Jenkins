@@ -1,7 +1,20 @@
-node {
-    stage('Clone code') {
-        git 'https://github.com/BalamiRR/Upgenix-QA.git'
+pipeline {
+  agent {
+        node {
+            label 'docker'
+        }
     }
+   tools {
+        maven "mvn"
+    }
+stages {
+     stage ("Pull code  from VCS repo"){
+            steps{
+                script{
+                    git "https://github.com/Haykelyazidi/Testinium-QA.git"
+                }
+            }
+        }
 
     stage('Run tests'){
         if(isUnix()){
@@ -13,5 +26,6 @@ node {
 
     stage('Generate report'){
            cucumber failedFeaturesNumber: -1, failedScenariosNumber: -1, failedStepsNumber: -1, fileIncludePattern: '**/*.json', pendingStepsNumber: -1, skippedStepsNumber: -1, sortingMethod: 'ALPHABETICAL', undefinedStepsNumber: -1
-    }
+}
+}
 }
